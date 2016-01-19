@@ -2,39 +2,25 @@ package com.spshop;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-//import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.spshop.AdRouter.AdRouterListener;
-//import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -43,13 +29,13 @@ public class MainActivity extends Activity {
 
     private AdRouter mAdView;
     private ArrayList<String> mImageUrl = null;
-    private RequestQueue mQueue = Volley.newRequestQueue(MainActivity.this);
+    private RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mQueue = Volley.newRequestQueue(MainActivity.this);
         //获取广告图片
         Map<String, String> map = new HashMap<String, String>();
         map.put("cname", "index_a1");
@@ -99,7 +85,18 @@ public class MainActivity extends Activity {
 
         @Override
         public void displayImage(String imageURL, ImageView imageView) {
-            //ImageLoader imageLoader = new ImageLoader(mQueue,new ImageLoader.ImageCache());
+            ImageLoader imageLoader = new ImageLoader(mQueue, new ImageLoader.ImageCache() {
+                @Override
+                public void putBitmap(String url, Bitmap bitmap) {
+                }
+
+                @Override
+                public Bitmap getBitmap(String url) {
+                    return null;
+                }
+            });
+            ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, R.drawable.loading, R.drawable.nophoto);
+            imageLoader.get(imageURL, listener);
             //ImageLoader imageLoader = ImageLoader.getInstance();
             //imageLoader.init(ImageLoaderConfiguration.createDefault(MainActivity.this));
             //imageLoader.displayImage(imageURL, imageView);
