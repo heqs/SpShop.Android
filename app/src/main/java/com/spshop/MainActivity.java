@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,18 +32,27 @@ public class MainActivity extends Activity {
     private AdRouter mAdView;
     private ArrayList<String> mImageUrl = null;
     private RequestQueue mQueue;
+    private ImageView homeAd1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mQueue = Volley.newRequestQueue(MainActivity.this);
-        //获取广告图片
+        homeAd1 = (ImageView)findViewById(R.id.home_ad1);
+        //头部轮播广告图片
+        loadTopAd();
+        loadAdv("index_a2",homeAd1);
+    }
+
+    private void loadTopAd()
+    {
         Map<String, String> map = new HashMap<String, String>();
         map.put("cname", "index_a1");
         map.put("num", "4");
+        map.put("version",getResources().getString(R.string.version));
         JSONObject params = new JSONObject(map);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://spshop.dbdy.net/api/app.asmx/GetAdvsByCname", params,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getResources().getString(R.string.server_api_url), params,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -71,8 +82,47 @@ public class MainActivity extends Activity {
             }
         });
         mQueue.add(jsonObjectRequest);
+    }
 
+    private void loadAdv(String cname, ImageView imageView) {
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("cname",cname);
+        map.put("version",getResources().getString(R.string.version));
+        JSONObject params = new JSONObject(map);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getResources().getString(R.string.server_api_url),params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("TAG", response.toString());
+                        String adJson = response.toString();
+                        try {
+                            JSONObject jsonObject = new JSONObject(adJson);
+                            JSONObject jsonObject2 = jsonObject.getJSONObject("d");
+                            String imageURL = jsonObject2.getString("ImgUrl");
+                            //设置广告图片
+                            ImageLoader imageLoader = new ImageLoader(mQueue, new ImageLoader.ImageCache() {
+                                @Override
+                                public void putBitmap(String url, Bitmap bitmap) {
+                                }
 
+                                @Override
+                                public Bitmap getBitmap(String url) {
+                                    return null;
+                                }
+                            });
+                            ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, R.drawable.loading, R.drawable.nophoto);
+                            imageLoader.get(imageURL, listener);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("TAG", error.getMessage(), error);
+            }
+        });
     }
 
     private AdRouterListener mAdCycleViewListener = new AdRouterListener() {
