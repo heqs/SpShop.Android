@@ -7,7 +7,8 @@
     <dimen name="menu_img_width">35dp</dimen>
     <dimen name="menu_img_height">35dp</dimen>
     <dimen name="home_ad_margin_top">10dp</dimen>
-    <dimen name="home_ad_txt_width">120dp</dimen>
+    <dimen name="home_ad_txt_width">0dp</dimen>
+    <dimen name="home_ad_height">80dp</dimen>
     <dimen name="home_ad_txt_padding">10dp</dimen>
     <dimen name="home_ad_txt_size">50sp</dimen>
 </resources>

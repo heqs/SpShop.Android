@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content">
 
                     <com.spshop.AdRouter
-                        android:id="@+id/ad_view"
+                        android:id="@+id/index_a1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -42,7 +42,7 @@
 
                     <TextView
                         android:layout_width="@dimen/home_ad_txt_width"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/home_ad_height"
                         android:background="#f9b70b"
                         android:gravity="center"
                         android:paddingLeft="@dimen/home_ad_txt_padding"
@@ -51,14 +51,16 @@
                         android:textColor="@color/colorHomeAdTxt"
                         android:textSize="@dimen/home_ad_txt_size"
                         android:textStyle="bold"
+                        android:layout_weight="1"
                         />
 
                     <ImageView
-                        android:id="@+id/home_ad1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitStart"
+                        android:id="@+id/index_a2"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/home_ad_height"
+                        android:scaleType="centerCrop"
                         android:adjustViewBounds="true"
+                        android:layout_weight="4"
                         />
                 </LinearLayout>
 
@@ -69,7 +71,7 @@
 
                     <TextView
                         android:layout_width="@dimen/home_ad_txt_width"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/home_ad_height"
                         android:background="#0ba7f4"
                         android:gravity="center"
                         android:paddingLeft="@dimen/home_ad_txt_padding"
@@ -78,14 +80,16 @@
                         android:textColor="@color/colorHomeAdTxt"
                         android:textSize="@dimen/home_ad_txt_size"
                         android:textStyle="bold"
+                        android:layout_weight="1"
                         />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitStart"
+                        android:id="@+id/index_a3"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/home_ad_height"
+                        android:scaleType="centerCrop"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/ad2"
+                        android:layout_weight="4"
                         />
                 </LinearLayout>
                  <LinearLayout
@@ -95,7 +99,7 @@
                      >
                      <TextView
                          android:layout_width="@dimen/home_ad_txt_width"
-                         android:layout_height="match_parent"
+                         android:layout_height="@dimen/home_ad_height"
                          android:background="#80c805"
                          android:text="3F"
                          android:textSize="@dimen/home_ad_txt_size"
@@ -104,13 +108,15 @@
                          android:gravity="center"
                          android:paddingLeft="@dimen/home_ad_txt_padding"
                          android:paddingRight="@dimen/home_ad_txt_padding"
+                         android:layout_weight="1"
                          />
                      <ImageView
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:src="@drawable/ad3"
-                         android:scaleType="fitStart"
+                         android:id="@+id/index_a4"
+                         android:layout_width="0dp"
+                         android:layout_height="@dimen/home_ad_height"
+                         android:scaleType="centerCrop"
                          android:adjustViewBounds="true"
+                         android:layout_weight="4"
                          />
                  </LinearLayout>
                 <View
@@ -127,16 +133,16 @@
                     >
 
                     <ImageView
+                        android:id="@+id/index_a5"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ad_footer"
                         android:scaleType="centerCrop"
                         android:layout_weight="1"
                         />
                     <TextView
+                        android:id="@+id/index_a5_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="牛皮男单品男装特卖 ￥199起"
                         android:gravity="center"
                         android:textSize="18sp"
                         android:textColor="#5b5b5b"

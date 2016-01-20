@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,31 +33,31 @@ public class MainActivity extends Activity {
     private AdRouter mAdView;
     private ArrayList<String> mImageUrl = null;
     private RequestQueue mQueue;
-    private ImageView homeAd1;
+    public JSONArray jsonArrayAds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mQueue = Volley.newRequestQueue(MainActivity.this);
-        homeAd1 = (ImageView)findViewById(R.id.home_ad1);
         //头部轮播广告图片
         loadTopAd();
-        loadAdv("index_a2",homeAd1);
+        loadAdvs("index_a2");
+        loadAdvs("index_a3");
+        loadAdvs("index_a4");
+        loadAdvs("index_a5");
     }
 
-    private void loadTopAd()
-    {
+    private void loadTopAd() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("cname", "index_a1");
         map.put("num", "4");
-        map.put("version",getResources().getString(R.string.version));
+        map.put("version", getResources().getString(R.string.version));
         JSONObject params = new JSONObject(map);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getResources().getString(R.string.server_api_url), params,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, getResources().getString(R.string.server_api_url) + "GetAdvsByCname", params,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("TAG", response.toString());
                         String adJson = response.toString();
                         try {
                             JSONObject jsonObject = new JSONObject(adJson);
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
                                 JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
                                 mImageUrl.add(jsonObject2.getString("ImgUrl"));
                             }
-                            mAdView = (AdRouter) findViewById(R.id.ad_view);
+                            mAdView = (AdRouter) findViewById(R.id.index_a1);
                             mAdView.setImageResources(mImageUrl, mAdCycleViewListener);
 
                         } catch (Exception e) {
@@ -84,12 +85,12 @@ public class MainActivity extends Activity {
         mQueue.add(jsonObjectRequest);
     }
 
-    private void loadAdv(String cname, ImageView imageView) {
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("cname",cname);
-        map.put("version",getResources().getString(R.string.version));
+    public void loadAdvs(String cname) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("cname", cname);
+        map.put("version", getResources().getString(R.string.version));
         JSONObject params = new JSONObject(map);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getResources().getString(R.string.server_api_url),params,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, getResources().getString(R.string.server_api_url) + "GetAdvByCname", params,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -98,8 +99,7 @@ public class MainActivity extends Activity {
                         try {
                             JSONObject jsonObject = new JSONObject(adJson);
                             JSONObject jsonObject2 = jsonObject.getJSONObject("d");
-                            String imageURL = jsonObject2.getString("ImgUrl");
-                            //设置广告图片
+                            String cname = jsonObject2.getString("Cname");
                             ImageLoader imageLoader = new ImageLoader(mQueue, new ImageLoader.ImageCache() {
                                 @Override
                                 public void putBitmap(String url, Bitmap bitmap) {
@@ -110,9 +110,30 @@ public class MainActivity extends Activity {
                                     return null;
                                 }
                             });
-                            ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, R.drawable.loading, R.drawable.nophoto);
-                            imageLoader.get(imageURL, listener);
-
+                            switch (cname) {
+                                case "index_a2":
+                                    ImageView imageViewA2 = (ImageView)findViewById(R.id.index_a2);
+                                    ImageLoader.ImageListener listener2 = ImageLoader.getImageListener(imageViewA2, R.drawable.loading, R.drawable.nophoto);
+                                    imageLoader.get(jsonObject2.getString("ImgUrl"), listener2);
+                                    break;
+                                case "index_a3":
+                                    ImageView imageViewA3 = (ImageView)findViewById(R.id.index_a3);
+                                    ImageLoader.ImageListener listener3 = ImageLoader.getImageListener(imageViewA3, R.drawable.loading, R.drawable.nophoto);
+                                    imageLoader.get(jsonObject2.getString("ImgUrl"), listener3);
+                                    break;
+                                case "index_a4":
+                                    ImageView imageViewA4 = (ImageView)findViewById(R.id.index_a4);
+                                    ImageLoader.ImageListener listener4 = ImageLoader.getImageListener(imageViewA4, R.drawable.loading, R.drawable.nophoto);
+                                    imageLoader.get(jsonObject2.getString("ImgUrl"), listener4);
+                                    break;
+                                case "index_a5":
+                                    ImageView imageViewA5 = (ImageView)findViewById(R.id.index_a5);
+                                    ImageLoader.ImageListener listener5 = ImageLoader.getImageListener(imageViewA5, R.drawable.loading, R.drawable.nophoto);
+                                    imageLoader.get(jsonObject2.getString("ImgUrl"), listener5);
+                                    TextView textViewA5 = (TextView)findViewById(R.id.index_a5_txt);
+                                    textViewA5.setText(jsonObject2.getString("Title"));
+                                    break;
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -123,6 +144,7 @@ public class MainActivity extends Activity {
                 Log.e("TAG", error.getMessage(), error);
             }
         });
+        mQueue.add(jsonObjectRequest);
     }
 
     private AdRouterListener mAdCycleViewListener = new AdRouterListener() {
